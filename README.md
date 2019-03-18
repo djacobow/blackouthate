@@ -1,4 +1,4 @@
-# blackouthate
+# Black Out Hate
 
 This is a browser extension to black out the names of some infamous terrorists and hate criminals.
 
@@ -14,4 +14,8 @@ dave@toolsofourtools.org
 ### Date
 
 March 2019
+
+### Other
+
+This extension is a derivative of https://github.com/djacobow/detrumpify.
 
