@@ -31,6 +31,7 @@
                 "shared.js",
                 "timers.js",
                 "text_changer.js",
+                "image_changer.js",
                 "top.js"
             ],
             "run_at":"document_end"
@@ -42,6 +43,7 @@
         "400":"icons/black-400.png"
     },
     "web_accessible_resources":[
-        "empty_image.png"
+        "empty_image.png",
+        "icons/black-400.png"
     ]
 }

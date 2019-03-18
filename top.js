@@ -6,6 +6,8 @@ var current_settings = null;
 var runReplacementOnce = function(elems = null, img_elems = null) {
     var tc = new TextChanger(current_settings, current_config);
     tc.run(elems);
+    var ic = new ImageChanger(current_settings, current_config);
+    ic.run(img_elems);
 };
 
 function getRunnableActions(config_actions, items) {

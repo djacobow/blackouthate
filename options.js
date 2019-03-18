@@ -15,6 +15,7 @@ var OptionsThingy = function() {
     this.restorethings = [
         ['site_filter', 'site_filter', false],
         ['track_mutations', 'track_mutations', true],
+        ['replace_images', 'replace_images', true],
         ['user_blacklist', 'user_blacklist', false],
         ['user_whitelist', 'user_whitelist', false],
     ];
@@ -30,6 +31,11 @@ var OptionsThingy = function() {
         ['track_mutations', 'change', function() {
             tthis.saveGen('track_mutations',
                 'track_mutations',
+                true);
+        }],
+        ['replace_images', 'change', function() {
+            tthis.saveGen('replace_images',
+                'replace_images',
                 true);
         }],
         ['user_blacklist', 'change', function() {

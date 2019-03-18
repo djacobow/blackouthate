@@ -105,6 +105,7 @@ ControlTimers.prototype.postconfig_init = function(current_config, current_setti
 
     if (this.isThisPageRunnable()) {
         if (this.runInfo.trackMutations) {
+            log('will track mutations');
             this.startMutationTracking();
             this.run_again = true; // force one run through no matter what
         } else {
