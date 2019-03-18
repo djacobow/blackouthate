@@ -2,16 +2,16 @@
     "manifest_version":2,
     "name":"Black Out Hate",
     "short_name":"Black Out Hate",
-    "description":"Blacks out the names of hate criminals and terrorists.",
+    "description":"Blacks out the names of infamous hate criminals and religious terrorists.",
     "author":"Dave Jacobowitz",
     "options_ui":{
         "page":"options.html",
         "chrome_style":true
     },
-    "version":"1.0.1",
+    "version":"1.0.5",
     "permissions":[
         "storage",
-        "tabs"
+        "activeTab"
     ],
     "browser_action":{
         "default_icon":{

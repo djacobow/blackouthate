@@ -58,17 +58,6 @@ textarea.disabled {
     <!-- <hr> -->
     <!-- <span>You may also choose which actions from this config to enable:</span> -->
     <div id="actionsenablediv" style="background-color: #e0e0e0;">
-        <table width="100%">
-            <tr>
-                <td width="25%"><b>Enabled Actions</b></td>
-                <td width="75%">
-                    <div id="actionstd" class="tooltip"></div>
-                    <p class="tooltiptext" style="left: 0px; width: 350px;">
-		    Some configurations contain more than one set of search strings and
-            replacements. Choose which available replacements you want to run.</p>
-                </td>
-            </tr>
-        </table>
     </div>
 
     <div id="replfractdiv" style="background-color: #f0f0f0;">
@@ -158,10 +147,22 @@ textarea.disabled {
     </div>
 
     <div id="configdetaildiv" style="background-color: #e0e0e0;">
-        <input type="checkbox" id="showconfigcheck" name="showconfigcheck" value="bloop">Show configuration details.<br>
-        <div id="configdiv" style="background-color: lightblue; display: none;">
+        <input type="checkbox" id="showconfigcheck" name="showconfigcheck" value="bloop">Show configuration details and blacked out names.<br>
+        <div id="configdiv" style="display: none;">
+            <table width="100%">
+                <tr>
+                    <td width="25%"><b>Enabled Actions</b></td>
+                    <td width="75%">
+                        <div id="actionstd" class="tooltip"></div>
+                        <p class="tooltiptext" style="left: 0px; width: 350px;">
+		        Check a name to black it out. Uncheck it to leave it be.
+                    </td>
+                </tr>
+            </table>
+
             <b>Currently loaded configuration:</b>
-            <textarea id="configjson" rows="10" style="width: 100%" readonly="true"></textarea>
+            <textarea id="configjson" rows="10" style="width: 100%"></textarea>
+            <input type="button" name="save_edits" id="save_edits" value="Save Edit to Configuration">
             <div></div>
             <div id="zapdiv" style="text-align: right">
                 <input style="font-size: 75%; background-color: pink;" type="button" name="reset_storage" id="reset_storage" value="Reset All Stored Preferences">

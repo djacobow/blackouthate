@@ -89,6 +89,8 @@ var make_default_config = function(namelist) {
 		    timeMultiplier: 1.8,
 		    maxTimeout: 12000
 	    },
+        match_style: "background-color: black; color: black",
+        replacement: 'XXXXXXXX',
         actions: {},
     };
 
@@ -117,6 +119,7 @@ var make_default_config = function(namelist) {
         }
 
         var re_chunks = [];
+        var img_re_chunks = [];
 
         if (false) {
             console.log('first',first);
@@ -128,21 +131,23 @@ var make_default_config = function(namelist) {
 
         if (first) {
             re_chunks.push(["((",first,'|',first.toUpperCase(),')\\s)'].join(''));
+            img_re_chunks.push(['(',first,'\\s)?'].join(''));
         }
         if (middles.length) {
             middles.forEach((middle) => {
                 re_chunks.push(["((",middle,'|',middle.toUpperCase(),')\\s)?'].join(''));
+                img_re_chunks.push(['(',middle,'\\s)?'].join(''));
             });
         }
         if (sur) {
             re_chunks.push(["(",sur,'|',sur.toUpperCase(),')(?!\\w)'].join(''));
+            img_re_chunks.push(['(',sur,')(?!\\w)'].join(''));
         }
 
         var action = {
             default_enabled: true,
-            match_style: "background-color: black; color: black",
-			monikers: ["XXXXXXX"],
             find_regex: [re_chunks.join(''), 'g'],
+            img_find_regex: [img_re_chunks.join(''), 'gi'],
         };
         o.actions[sur] = action;
     });

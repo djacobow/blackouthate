@@ -121,7 +121,7 @@ ImageChanger.prototype.run = function(imgs = null) {
                             ni.addEventListener('click', unReplaceEventHandler);
                         }
                     } else {
-                        log('no match');
+                        // log('no match');
                     }
                 }
             }

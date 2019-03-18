@@ -23,12 +23,18 @@ function zapStorage(cb) {
 
 
 var loadConfig = function(settings, cb) {
-    chrome.storage.local.set({
-        'cfgdata': default_config,
-    }, function() {
-        chrome.storage.local.get(['cfgdata'],function(items) {
+    chrome.storage.local.get(['cfgdata'],(items) => {
+        if (items.cfgdata) {
             cb(null, items.cfgdata);
-        });
+        } else {
+            chrome.storage.local.set({
+                'cfgdata': default_config,
+            }, () => {
+                chrome.storage.local.get(['cfgdata'],function(items) {
+                    cb(null, items.cfgdata);
+                });
+            });
+        }
     });
 };
 

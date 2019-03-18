@@ -4,58 +4,6 @@ var TextChanger = function(settings, config) {
     this.current_config = config;
 };
 
-TextChanger.prototype.get_randomize_time = function(mode) {
-    var wait = 0;
-    var potential_mode = mode;
-    if (potential_mode == 'always') {
-        wait = 0;
-    } else if (potential_mode == '1min') {
-        wait = 60 * 1000;
-    } else if (potential_mode == '15min') {
-        wait = 15 * 60 * 1000;
-    } else if (potential_mode == 'hourly') {
-        wait = 60 * 60 * 1000;
-    } else if (potential_mode == 'daily') {
-        wait = 24 * 60 * 60 * 1000;
-    } else if (potential_mode == 'weekly') {
-        wait = 7 * 24 * 60 * 60 * 1000;
-    } else if (potential_mode == 'monthly') {
-        wait = 30 * 24 * 60 * 60 * 1000;
-    } else if (potential_mode == 'yearly') {
-        wait = 365 * 24 * 60 * 60 * 1000;
-    }
-    // log('mode was: ' + mode);
-    // log('wait is: ' + wait);
-    return wait;
-};
-
-
-
-
-// pick or generate a new insult immediately
-TextChanger.prototype.choose_now = function(use_matic, moniker_list, action, choice) {
-    var item = null;
-
-    var item_idx = Math.floor(moniker_list.length * Math.random());
-    item = moniker_list[item_idx % moniker_list.length];
-
-    choice.last_chosen_item = item;
-    choice.last_chosen_time = (new Date()).getTime();
-};
-
-
-// return the next insult -- may be the same as the last
-// insult or a new one depending on time and user mode
-TextChanger.prototype.choose = function(rand_mode, use_matic, moniker_list, action, choice) {
-    var wait = this.get_randomize_time(rand_mode);
-    var now = (new Date()).getTime();
-    // log('choose wait: ' + wait + ' now: ' + now + ' last_chosen: ' + choice.last_chosen_time);
-    if (!choice.hasOwnProperty('last_chosen_time') ||
-        ((now - choice.last_chosen_time) >= wait)) {
-        this.choose_now(use_matic, moniker_list, action, choice);
-    }
-    return choice;
-};
 
 // convert a text string into an array of
 // elements that represent the bits and pieces
@@ -99,44 +47,22 @@ TextChanger.prototype.find_match_nonmatch_chunks = function(text, re) {
     return broken_texts;
 };
 
-TextChanger.prototype.randomPercentTrue = function(perc) {
-    var res = (Math.floor(Math.random() * 100) < perc);
-    // log('repl_perc: ' + perc + ' res: ' + res);
-    return res;
-};
-
 TextChanger.prototype.make_replacement_elems_array = function(args) {
 
     var action_name = useIfElse(args, 'action_name', '__error_missing_action_name');
     var action = args.action;
-    var rand_mode = useIfElse(args, 'rand_mode', 'always');
-    var use_matic = useIfElse(args, 'use_matic', 'off');
-    var moniker_list = useIfElse(args, 'monikers', []);
-    var brackets = useIfElse(args, 'brackets', ['', '']);
-    var repl_percent = useIfElse(args, 'replace_percent', 100);
+    var replacement = useIfElse(args,'replacement','XXXXXXX');
     var broken_texts = args.broken_texts;
     var orig_node = args.node;
-    var choice = args.choice;
-
+    var match_style = useIfElse(args,'match_style','background-color: black; color: black;');
     var repl_array = [];
     var repl_count = 0;
     for (var k = 0; k < broken_texts.length; k++) {
         chunk = broken_texts[k];
-        if (chunk.match && this.randomPercentTrue(repl_percent)) {
-            this.choose(rand_mode, use_matic, moniker_list, action, choice);
-            var replacement = choice.last_chosen_item;
-            replacement = brackets[0] + replacement + brackets[1];
-
+        if (chunk.match) {
             var unode = document.createElement('span');
-            // This style setting that can be part of a config
-            // is in addition to any styles's associated with the
-            // detrumpified class.
-            unode.style = "";
+            unode.style = match_style;
             unode.title = 'was: "' + chunk.text + '"';
-
-            if (action.hasOwnProperty('match_style')) {
-                unode.style = action.match_style;
-            }
             unode.className = defaults.insult_classname;
             unode.appendChild(document.createTextNode(replacement));
             repl_array.push(unode);
@@ -153,37 +79,6 @@ TextChanger.prototype.make_replacement_elems_array = function(args) {
     };
 };
 
-
-TextChanger.prototype.filterListByWordCount = function(list, max_words) {
-    var olist = [];
-    for (var p = 0; p < list.length; p++) {
-        var item = list[p];
-        var word_count = item.split(/[\s\-]/).length;
-        if ((max_words === 0) || (word_count <= max_words)) {
-            olist.push(item);
-        }
-    }
-    return olist;
-};
-
-TextChanger.prototype.determineBrackets = function(mode, action) {
-    var brackets = ['', ''];
-    if (action.hasOwnProperty('scarequote') && action.scarequote) {
-        brackets = ['\u201c', '\u201d'];
-    }
-    if (action.hasOwnProperty('bracket') && (action.bracket.length >= 2)) {
-        brackets = [action.bracket[0], action.bracket[1]];
-    }
-    switch (mode) {
-        case 'curly':
-            brackets = ['\u201c', '\u201d'];
-            break;
-        case 'square':
-            brackets = ['[', ']'];
-            break;
-    }
-    return brackets;
-};
 
 TextChanger.prototype.run = function(elements = null) {
     log('switch_text START');
@@ -202,10 +97,9 @@ TextChanger.prototype.run = function(elements = null) {
     var tthis = this;
     if (true) {
         var action_count = 0;
-        var stored_choices = useIfElse(this.current_settings, 'stored_choices', {});
-        // log('STORED CHOICES AT START');
-        // log(JSON.stringify(stored_choices));
         var actions_to_run = getRunnableActions(tthis.current_config.actions, this.current_settings);
+        var replacement = tthis.current_config.replacement;
+        var match_style= tthis.current_config.match_style;
 
         for (n = 0; n < actions_to_run.length; n++) {
             action_name = actions_to_run[n];
@@ -213,33 +107,10 @@ TextChanger.prototype.run = function(elements = null) {
             var visit_attrib_name = '_dtv_' + action_name;
             var action = tthis.current_config.actions[action_name];
             // log(action);
-            if (!action.hasOwnProperty('monikers')) {
-                log("skipping action; no monikers");
-                continue;
-            }
-
-            var brevity = useIfElse(this.current_settings, 'brevity', '0');
-            var use_matic = useIfElse(this.current_settings, 'use_matic', 'off');
-            var rand_mode = useIfElse(this.current_settings, 'rand_mode', 'always');
-            var replace_percent = parseFloat(
-                useIfElse(this.current_settings, 'replace_fraction', '100')
-            );
-
-            // create a sublist of monikers that meet the brevity criteria
-            var max_wordcount = parseInt(brevity);
-            var monikers_to_use = tthis.filterListByWordCount(action.monikers, max_wordcount);
-
-            var bracket_mode = useIfElse(this.current_settings, 'brackets', 'off');
-            var brackets = tthis.determineBrackets(bracket_mode, action);
 
             var search_regex = new RegExp(action.find_regex[0],
                 action.find_regex[1]);
             if (!elements) elements = document.getElementsByTagName('*');
-
-            if (!stored_choices.hasOwnProperty(action_name)) {
-                stored_choices[action_name] = {};
-                this.choose_now(use_matic, monikers_to_use, action, stored_choices[action_name]);
-            }
 
             for (var i = 0; i < elements.length; i++) {
                 var element = elements[i];
@@ -259,14 +130,11 @@ TextChanger.prototype.run = function(elements = null) {
                                     var rr = tthis.make_replacement_elems_array({
                                         action_name: action_name,
                                         action: action,
-                                        rand_mode: rand_mode,
                                         broken_texts: broken_texts,
-                                        use_matic: use_matic,
-                                        replace_percent: replace_percent,
-                                        monikers: monikers_to_use,
-                                        brackets: brackets,
+                                        match_style: match_style,
+                                        replacement: replacement,
                                         node: node,
-                                        choice: stored_choices[action_name]
+                                        // choice: stored_choices[action_name]
                                     });
 
                                     if (rr.repl_count) {
@@ -293,13 +161,5 @@ TextChanger.prototype.run = function(elements = null) {
 
             action_count += 1;
         }
-
-        if (true) {
-            // log("iteration done; storing choices");
-            chrome.storage.local.set({
-                'stored_choices': stored_choices
-            }, function() {});
-        }
-
     }
 };
