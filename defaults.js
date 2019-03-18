@@ -101,9 +101,8 @@ var make_default_config = function(namelist) {
             therest = bycomma[1].split(' ');
         } else {
             byspace = name.split(' ');
-            sur = byspace[-1];
+            sur = byspace.slice(-1)[0];
             therest = byspace.slice(0,-1);
-
         }
 
 
@@ -123,6 +122,7 @@ var make_default_config = function(namelist) {
             console.log('first',first);
             console.log('middles',middles);
             console.log('sur',sur);
+            console.log('therest',therest);
             console.log('----');
         }
 
