@@ -8,7 +8,7 @@
         "page":"options.html",
         "chrome_style":true
     },
-    "version":"1.0.5",
+    "version":"1.0.7",
     "permissions":[
         "storage",
         "activeTab"
@@ -45,5 +45,10 @@
     "web_accessible_resources":[
         "empty_image.png",
         "icons/black-400.png"
-    ]
+    ],
+    "applications":{
+        "gecko":{
+            "id":"{db480ebd-a0cf-48d6-b655-919e889cb1ab}"
+        }
+    }
 }
