@@ -1,6 +1,7 @@
 /* jshint esversion:6 */
 
 var names = [
+// https://en.wikipedia.org/wiki/List_of_rampage_killers_(religious,_political_or_racial_crimes)
 'Tarrant, Brenton Harrison',
 'Lahouaiej-Bouhlel, Mohamed Salmene',
 'Breivik, Anders Behring',
@@ -164,7 +165,7 @@ var defaults = {
     insult_classname: 'blackedout',
 
     // run on any page or just whitelist
-    site_filter: 'use_whitelist',
+    site_filter: 'use_blacklist',
 
     // use the mutation approach or timer approach
     track_mutations: false,
@@ -196,6 +197,7 @@ var defaults = {
 	    "pjmedia.com", "hotair.com", "cnsnews.com",
 	    "westernjournalism.com", "washingtonexaminer.com", "tpnn.com",
 	    "newsbusters.org", "twitchy.com", "news.google.com",
-	    "npr.org", "cnbc.com", "reuters.com"
+	    "npr.org", "cnbc.com", "reuters.com", "tvnz.co.nz",
+        "nzherald.co.nz", "press.co.nz", "stuff.co.nz"
     ].join(' '),
 };
